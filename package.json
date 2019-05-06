@@ -4,15 +4,38 @@
   "description": "This is a personal blog",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "eslint --ignore-path .gitignore .",
+    "build": "babel ./services -d dist",
+    "start": "node -r node_modules/dotenv/config dist/index.js",
+    "develop": "nodemon --delay 2 --exec babel-node ./services/index.js NODE_ENV=dev --require node_modules/dotenv/config ",
+    "babel-node": "babel-node ./services/index.js --require node_modules/dotenv/config"
   },
   "repository": {
     "type": "git",
-    "url": "\u0016https://github.com/khanh1998/Blog.git"
+    "url": "git+https://github.com/khanh1998/Blog.git"
   },
   "keywords": [
     "Node.js"
   ],
   "author": "Quoc Khanh",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.5",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.4.4",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-config-strongloop": "^2.1.0"
+  }
 }
