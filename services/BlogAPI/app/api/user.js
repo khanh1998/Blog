@@ -28,4 +28,14 @@ export async function signup (req, res) {
   } catch (error) {
     res.status(500).json({success: false, message: `Database error: ${error.message}`})
   }
+};
+
+export async function getUser(req, res) {
+  const UserModel = models.User;
+  try {
+    let user = await UserModel.findOne({username: req.params.username});
+    res.json(user);
+  } catch (error) {
+    res.status(500).send({success: false, error,});
+  }
 }

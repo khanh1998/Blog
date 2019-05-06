@@ -9,7 +9,7 @@ export default (passport) => {
   const UserModel = models.User;
   const options = {
     secretOrKey: config.SECRET,
-    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken,
+    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
   };
   passport.use(new Strategy(options, (jwt_payload, done) => {
     UserModel.findOne({ username: jwt_payload.username }, (err, user) => {

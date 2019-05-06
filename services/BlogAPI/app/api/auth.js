@@ -2,7 +2,7 @@ import models from '../setup';
 import jwt from 'jsonwebtoken';
 import config from '../../config/index';
 
-export async function login (req, res) {
+export async function login(req, res) {
   const UserModel = models.User;
   try {
     const user = await UserModel.findOne({ username: req.body.username });
@@ -12,21 +12,32 @@ export async function login (req, res) {
         message: 'Authentication failed, user is not found',
       });
     else {
-      let valid = await UserModel.comparePassword(req.body.password);
+      let validPassword = await user.comparePassword(req.body.password);
+      if (validPassword) {
+        let payload = {
+          username: user.username,
+          role: user.role,
+          bio: user.bio
+        };
+        jwt.sign(payload, config.SECRET, (err, token) => {
+            if (err)
+              res.json( {success: false, err, } );
+            else {
+              res.json({
+                success: true,
+                message: 'Login successfully',
+                token,
+              });
+            }
+          });
 
-      
-      if (valid) {
-        const token = await jwt.sign(req.body.username, config.SECRET);
-        res.json({
-          success: true,
-          message: 'Login successfully',
-          token,
-        });
+      } else {
+        res.json( {success: false, message: "Password or Username is invalid"} );
       }
     }
   } catch (error) {
     console.log(error);
-    
+
     res.status(500).send({
       success: false,
       message: 'Something went wrong!',
