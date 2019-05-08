@@ -23,32 +23,38 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     required: [true, 'Role is required'],
-    enum: ['admin', 'reader'],
+    enum: ['admin', 'reader', 'writer'],
   },
   bio: {
     type: String,
     maxlength: [300, 'Maximum length of bio is 300 characters'],
   },
+  avatar: {
+    type: String,
+  },
 });
 
+async function hashPassword(password) {
+  let salt = await bcrypt.genSalt(10);
+  let encrypted = await bcrypt.hash(password, salt);
+  return encrypted;
+}
+
 userSchema.pre('save', async function(next) {
-  if (this.isModified('password') || this.isNew) {
-    try {
-      let salt = await bcrypt.genSalt(10);
-      let encrypted = await bcrypt.hash(this.password, salt);
+  try {
+    if (this.isModified('password') || this.isNew) {
+      let encrypted = await hashPassword(this.password);
       this.password = encrypted;
-      next();
-    } catch (error) {
-      next(error);
     }
-  } else {
     next();
+  } catch (error) {
+    next(error);
   }
 });
 
 userSchema.methods.comparePassword = async function(password) {
-    let match = await bcrypt.compare(password, this.password);
-    return match;
+  let match = await bcrypt.compare(password, this.password);
+  return match;
 };
 
 export default mongoose.model('User', userSchema);

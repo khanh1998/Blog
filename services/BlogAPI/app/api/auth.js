@@ -17,22 +17,21 @@ export async function login(req, res) {
         let payload = {
           username: user.username,
           role: user.role,
-          bio: user.bio
         };
         jwt.sign(payload, config.SECRET, (err, token) => {
-            if (err)
-              res.json( {success: false, err, } );
-            else {
-              res.json({
-                success: true,
-                message: 'Login successfully',
-                token,
-              });
-            }
-          });
+          if (err)
+            res.json({success: false, err });
+          else {
+            res.json({
+              success: true,
+              message: 'Login successfully',
+              token,
+            });
+          }
+        });
 
       } else {
-        res.json( {success: false, message: "Password or Username is invalid"} );
+        res.json({success: false, message: 'Password or Username is invalid'});
       }
     }
   } catch (error) {

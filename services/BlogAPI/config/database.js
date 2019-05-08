@@ -4,15 +4,17 @@ import config from '../config/index';
 mongoose.Promise = global.Promise;
 try {
   console.log(config);
-  
+
   mongoose.connect(config.MONGO_URL, {
     useCreateIndex: true,
     useNewUrlParser: true,
+    useFindAndModify: false,
   });
 } catch (err) {
   mongoose.createConnection(config.MONGO_URL, {
     useCreateIndex: true,
     useNewUrlParser: true,
+    useFindAndModify: false,
   });
 }
 let connection = mongoose.connection;
