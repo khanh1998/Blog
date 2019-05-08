@@ -4,5 +4,5 @@ This is a personal blog API
 # Clone
 git clone https://github.com/khanh1998/Blog.git
 
-#Run
+# Run
 npm run develop
