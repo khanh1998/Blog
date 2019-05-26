@@ -6,9 +6,10 @@
   "scripts": {
     "pretest": "eslint --ignore-path .gitignore .",
     "build": "babel ./services -d dist",
-    "start": "node -r node_modules/dotenv/config dist/index.js",
+    "start": "node -r ./node_modules/dotenv/config ./dist/index.js",
     "develop": "nodemon --delay 2 --exec babel-node ./services/index.js NODE_ENV=dev --require node_modules/dotenv/config ",
-    "babel-node": "babel-node ./services/index.js --require node_modules/dotenv/config"
+    "babel-node": "babel-node ./services/index.js --require node_modules/dotenv/config",
+    "debug": "node --inspect -r ./node_modules/dotenv/config ./dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -20,13 +21,15 @@
   "author": "Quoc Khanh",
   "license": "MIT",
   "dependencies": {
+    "@babel/polyfill": "^7.4.4",
     "bcrypt": "^3.0.6",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
-    "express": "^4.16.4",
+    "express": "^4.17.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.5.5",
+    "mongoose": "^5.5.9",
     "multer": "^1.4.1",
+    "nodemon": "^1.19.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0"
   },

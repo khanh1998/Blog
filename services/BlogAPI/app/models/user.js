@@ -34,17 +34,22 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-async function hashPassword(password) {
-  let salt = await bcrypt.genSalt(10);
-  let encrypted = await bcrypt.hash(password, salt);
-  return encrypted;
+function hashPassword(password) {
+  bcrypt.genSalt(10, (err, salt) => {
+    if (err) throw err;
+    bcrypt.hash(password, salt, (err, encrypted) => {
+      if (err) throw err;
+      return encrypted;
+    })
+  })
 }
 
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', function(next) {
   try {
     if (this.isModified('password') || this.isNew) {
-      let encrypted = await hashPassword(this.password);
-      this.password = encrypted;
+      hashPassword(this.password, (encrypted) => {
+        this.password = encrypted;
+      })
     }
     next();
   } catch (error) {

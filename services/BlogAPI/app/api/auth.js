@@ -16,6 +16,7 @@ export async function login(req, res) {
       if (validPassword) {
         let payload = {
           username: user.username,
+          _id: user._id,
           role: user.role,
         };
         jwt.sign(payload, config.SECRET, (err, token) => {

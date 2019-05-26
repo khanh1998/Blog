@@ -51,8 +51,8 @@ export async function updateUser(req, res) {
 
     if (user) {
       let body = req.body;
-      
-      //update password
+
+      // update password
       if (body.oldPassword !== undefined) {
         if (body.newPassword !== undefined) {
           let samePassword = await user.comparePassword(body.oldPassword);
@@ -66,7 +66,7 @@ export async function updateUser(req, res) {
         }
       }
 
-      //update personal information
+      // update personal information
       if (body.email !== undefined)
         user.email = req.body.email;
       if (body.bio !== undefined)
@@ -74,17 +74,17 @@ export async function updateUser(req, res) {
       if (body.avatar !== undefined)
         user.avatar = req.body.avatar;
 
-      //save to database
+      // save to database
       let updated = await user.save();
       if (updated)
-        res.json({ success: true, message: `${updated.username} has been updated successfully`, updated, });
+        res.json({ success: true, message: `${updated.username} has been updated successfully`, updated });
       else
-        res.status(500).json({ success: false, message: 'cannot save user information', error: error.message, });
+        res.status(500).json({ success: false, message: 'cannot save user information'});
     } else {
-      res.status(500).json({ success: false, message: 'User is not existed', error: error.message, });
+      res.status(500).json({ success: false, message: 'User is not existed'});
     }
   } catch (error) {
-    res.status(500).json({ success: false, message: 'cannot find user information', error: error.message, });
+    res.status(500).json({ success: false, message: 'cannot find user information', error: error.message });
   }
 };
 
@@ -94,9 +94,9 @@ export async function deleteUserItself(req, res) {
     let payload = req.body['jwt_payload'];
     let deleted = await UserModel.findOneAndDelete({ username: payload.username });
     if (deleted) {
-      res.status(200).json({ success: true, message: `${deleted.username} has been deleted successfully`, });
+      res.status(200).json({ success: true, message: `${deleted.username} has been deleted successfully` });
     } else {
-      res.status(500).json({ success: false, message: 'cannot delete user information', error: error.message });
+      res.status(500).json({ success: false, message: 'cannot delete user information'});
     }
   } catch (error) {
     res.status(500).json({ success: false, message: 'cannot delete user information', error: error.message });

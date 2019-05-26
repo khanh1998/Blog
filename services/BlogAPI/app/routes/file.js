@@ -1,6 +1,6 @@
 import {uploadImage} from '../api/file';
-import config from '../../config'
+import config from '../../config';
 
-export const configUploadFile = (app, passport) => {
+export const configUploadFileRoute = (app, passport) => {
   app.post('/api/v1/image', uploadImage);
-}
+};

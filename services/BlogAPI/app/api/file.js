@@ -1,12 +1,13 @@
 'use strict'
 import multer from 'multer';
 
-const imageStorage = './services/BlogAPI/public/upload/image';
+const imageStorage = './services/public/upload/image';
 const acceptedMimeType = [
   ['image/png', '.png'], 
   ['image/jpg', '.jpg'], 
   ['image/jpeg','.jpeg'], 
   ['image/bmp', '.bmp']];
+  
 const map = new Map(acceptedMimeType);
 const isAccepted = (mimeType) => {
   if (map.get(mimeType))
@@ -50,5 +51,9 @@ export async function uploadImage(req, res) {
     // Everything went fine.
     res.json({ success: true, message: 'upload image successfully', file: req.body['uploadFileName']})
   });
+
+}
+
+export async function getImage(req, res) {
 
 }
