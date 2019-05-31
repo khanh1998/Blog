@@ -43,7 +43,7 @@ export async function createArticle(req, res) {
 export async function readArticle(req, res) {
   const articleModel = models.Article;
   try {
-    let article = await articleModel.findOne({ uri: req.params.uri });
+    let article = await articleModel.findOne({ uri: req.params.uri }).populate('author');
     if (article) {
       res.status(200).json(article);
     } else {

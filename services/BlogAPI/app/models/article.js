@@ -1,6 +1,53 @@
 import mongoose from 'mongoose';
 import commentModel from '../models/user';
 
+let SubcommentSchema = new mongoose.Schema({
+  order: {
+    type: Number,
+    required: true,
+  },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  body: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 2000,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+    required: true,
+  },
+});
+
+let commentSchema = new mongoose.Schema({
+  order: {
+    type: Number,
+    required: true,
+  },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  body: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 2000,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+    required: true,
+  },
+  reply: [SubcommentSchema]
+});
+
 let articleSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -42,8 +89,7 @@ let articleSchema = new mongoose.Schema({
     ref: 'User'
   }], //to save _id of user who clicked like button
   tag: [String],
-  comment: [commentModel.schema],
+  comment: [commentSchema],
 });
-
 
 export default mongoose.model('Article', articleSchema);
