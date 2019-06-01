@@ -44,28 +44,29 @@ function hashPassword(password) {
   })
 }
 
-userSchema.pre('save', function(next) {
-  try {
-    if (this.isModified('password') || this.isNew) {
-      bcrypt.genSalt(10, (err, salt) => {
-        if (err) throw err;
-        bcrypt.hash(this.password, salt, (err, encrypted) => {
-          if (err) throw err;
-          this.password = encrypted;
-          console.log(encrypted);
-          
-        })
+Schema.pre('save', function (next) {
+  const user = this;
+
+  if (this.isModified('password') || this.isNew) {
+    bcrypt.genSalt(10, (error, salt) => {
+      if (error) return next(error);
+
+      bcrypt.hash(user.password, salt, (error, hash) => {
+        if (error) return next(error);
+
+        user.password = hash;
+        next();
       });
-    }
-    next();
-  } catch (error) {
-    next(error);
-  }
+    });
+  } else return next();
 });
 
-userSchema.methods.comparePassword = async function(password) {
-  let match = await bcrypt.compare(password, this.password);
-  return match;
+Schema.methods.comparePassword = function (password, callback) {
+  bcrypt.compare(password, this.password, (error, matches) => {
+    if (error) return callback(error);
+    callback(null, matches);
+  });
 };
+
 
 export default mongoose.model('User', userSchema);
