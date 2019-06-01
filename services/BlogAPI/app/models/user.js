@@ -49,7 +49,7 @@ userSchema.pre('save', function(next) {
     if (this.isModified('password') || this.isNew) {
       bcrypt.genSalt(10, (err, salt) => {
         if (err) throw err;
-        bcrypt.hash(password, salt, (err, encrypted) => {
+        bcrypt.hash(this.password, salt, (err, encrypted) => {
           if (err) throw err;
           this.password = encrypted;
           console.log(encrypted);
