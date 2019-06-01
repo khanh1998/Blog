@@ -51,11 +51,17 @@ userSchema.pre('save', function (next) {
   } else return next();
 });
 
-userSchema.methods.comparePassword = function (password, callback) {
-  bcrypt.compare(password, this.password, (error, matches) => {
-    if (error) return callback(error);
-    callback(null, matches);
-  });
+userSchema.methods.comparePassword = function (password) {
+  try {
+    const user = this;
+    let matches = await bcrypt.compare(password, user.password);
+    if (matches) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export default mongoose.model('User', userSchema);
