@@ -47,9 +47,13 @@ function hashPassword(password) {
 userSchema.pre('save', function(next) {
   try {
     if (this.isModified('password') || this.isNew) {
-      hashPassword(this.password, (encrypted) => {
-        this.password = encrypted;
-      })
+      bcrypt.genSalt(10, (err, salt) => {
+        if (err) throw err;
+        bcrypt.hash(password, salt, (err, encrypted) => {
+          if (err) throw err;
+          this.password = encrypted;
+        })
+      });
     }
     next();
   } catch (error) {
