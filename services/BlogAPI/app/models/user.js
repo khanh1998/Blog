@@ -52,6 +52,8 @@ userSchema.pre('save', function(next) {
         bcrypt.hash(password, salt, (err, encrypted) => {
           if (err) throw err;
           this.password = encrypted;
+          console.log(encrypted);
+          
         })
       });
     }
