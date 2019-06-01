@@ -34,17 +34,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-function hashPassword(password) {
-  bcrypt.genSalt(10, (err, salt) => {
-    if (err) throw err;
-    bcrypt.hash(password, salt, (err, encrypted) => {
-      if (err) throw err;
-      return encrypted;
-    })
-  })
-}
-
-Schema.pre('save', function (next) {
+userSchema.pre('save', function (next) {
   const user = this;
 
   if (this.isModified('password') || this.isNew) {
@@ -61,12 +51,11 @@ Schema.pre('save', function (next) {
   } else return next();
 });
 
-Schema.methods.comparePassword = function (password, callback) {
+userSchema.methods.comparePassword = function (password, callback) {
   bcrypt.compare(password, this.password, (error, matches) => {
     if (error) return callback(error);
     callback(null, matches);
   });
 };
-
 
 export default mongoose.model('User', userSchema);
